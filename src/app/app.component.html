@@ -1,0 +1,24 @@
+<div class="column code-editor">
+  <div class="line-numbers">
+    <div class="line-number"></div>
+    <div class="line-number"></div>
+    <div class="line-number"></div>
+    <div class="line-number"></div>
+    <div class="line-number"></div>
+    <div class="line-number"></div>
+    <div class="line-number"></div>
+    <div class="line-number"></div>
+    <div class="line-number"></div>
+    <div class="line-number"></div>
+  </div>
+  <textarea
+    [formControl]="editorControl"
+    class="editor-input"
+    placeholder="Type your code here..."
+  ></textarea>
+</div>
+
+<div class="column output">
+  <div class="output__title">Console:</div>
+  <div class="output__lines" [innerHTML]="consoleOutput"></div>
+</div>
