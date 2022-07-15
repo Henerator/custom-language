@@ -1,19 +1,10 @@
 <div class="column code-editor">
-  <div class="line-numbers">
-    <div class="line-number"></div>
-    <div class="line-number"></div>
-    <div class="line-number"></div>
-    <div class="line-number"></div>
-    <div class="line-number"></div>
-    <div class="line-number"></div>
-    <div class="line-number"></div>
-    <div class="line-number"></div>
-    <div class="line-number"></div>
-    <div class="line-number"></div>
+  <div class="code-editor__line-numbers">
+    <div *appRepeat="editorLinesCount; index as lineNumber">{{ lineNumber }}</div>
   </div>
   <textarea
     [formControl]="editorControl"
-    class="editor-input"
+    class="code-editor__input"
     placeholder="Type your code here..."
   ></textarea>
 </div>

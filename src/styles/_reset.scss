@@ -1,3 +1,5 @@
+@use "src/styles/fonts/fonts" as fonts;
+
 *,
 *::before,
 *::after {
@@ -14,9 +16,6 @@
 html,
 body {
   height: 100%;
-}
-
-body {
-  font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+  font-family: fonts.$SFMono;
   font-size: 16px;
 }

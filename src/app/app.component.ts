@@ -5,6 +5,7 @@ import {
   debounceTime,
   distinctUntilChanged,
   filter,
+  map,
   Subject,
   takeUntil,
 } from 'rxjs';
@@ -19,11 +20,19 @@ import { Interpreter, Lexer, Parser } from './language';
 export class AppComponent implements OnInit {
   editorControl = new FormControl('');
   consoleOutput = '';
+  editorLinesCount = 0;
 
   ngOnInit(): void {
     this.editorControl.valueChanges
       .pipe(filter(Boolean), distinctUntilChanged(), debounceTime(1500))
       .subscribe((value) => this.runCode(value));
+
+    this.editorControl.valueChanges
+      .pipe(
+        debounceTime(300),
+        map((value) => (value || '').split('\n').length)
+      )
+      .subscribe((count) => (this.editorLinesCount = count));
 
     const code = this.trimCode(SourceCodeMock);
     this.editorControl.setValue(code);
