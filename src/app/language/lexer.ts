@@ -1,5 +1,6 @@
-import { Token } from './token';
 import { TokenType } from './enums/token-type.enum';
+import { ErrorProducer } from './error-producer';
+import { Token } from './token';
 
 class LexerToken {
   constructor(
@@ -32,7 +33,7 @@ const LexerDictionary = [
 
 const ingoreTokenTypes = new Set([TokenType.Space]);
 
-export class Lexer {
+export class Lexer extends ErrorProducer {
   private code = '';
   private position = 0;
   private tokenList: Token[] = [];
@@ -65,7 +66,7 @@ export class Lexer {
       }
     }
 
-    throw new Error(
+    this.throwError(
       `Unexpected token "${this.code[this.position]}" on ${this.position}`
     );
   }

@@ -8,10 +8,11 @@ import {
   StringNode,
   VariableNode,
 } from './ast';
-import { Token } from './token';
 import { TokenType } from './enums/token-type.enum';
+import { ErrorProducer } from './error-producer';
+import { Token } from './token';
 
-export class Parser {
+export class Parser extends ErrorProducer {
   private lookahead: Token | null = null;
   private tokens: Token[] = [];
   private position = -1;
@@ -128,7 +129,7 @@ export class Parser {
         return this.parseStringLiteral();
     }
 
-    throw new Error(`Unexpected literal on ${token?.position}`);
+    this.throwError(`Unexpected literal on ${token?.position}`);
   }
 
   private parseNumericLiteral(): ExpressionNode {
@@ -154,11 +155,11 @@ export class Parser {
     const token = this.lookahead;
 
     if (token === null) {
-      throw new SyntaxError(`Unexpected end of input, expected: "${type}"`);
+      this.throwError(`Unexpected end of input, expected: "${type}"`);
     }
 
     if (token.type !== type) {
-      throw new SyntaxError(
+      this.throwError(
         `Unexpected token: "${token.type}", expected: "${type}" on ${token.position}`
       );
     }

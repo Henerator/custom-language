@@ -9,8 +9,9 @@ import {
   StringNode,
   VariableNode,
 } from './ast';
+import { ErrorProducer } from './error-producer';
 
-export class Interpreter {
+export class Interpreter extends ErrorProducer {
   private logEventSubject = new Subject<string>();
   private scope: any = {};
 
@@ -31,7 +32,7 @@ export class Interpreter {
   private run(node: ExpressionNode): any {
     if (node instanceof VariableNode) {
       if (!this.scope.hasOwnProperty(node.name)) {
-        throw new Error(`Variable "${node.name}" is not exist`);
+        this.throwError(`Variable "${node.name}" is not exist`);
       }
 
       return this.scope[node.name];
@@ -52,7 +53,7 @@ export class Interpreter {
         case '-':
           return this.run(node.leftNode) - this.run(node.rightNode);
         default:
-          throw new Error(`Unknown additive operator`);
+          this.throwError(`Unknown additive operator`);
       }
     }
 
@@ -63,7 +64,7 @@ export class Interpreter {
         case '/':
           return this.run(node.leftNode) / this.run(node.rightNode);
         default:
-          throw new Error(`Unknown multiplicative operator`);
+          this.throwError(`Unknown multiplicative operator`);
       }
     }
 
@@ -80,6 +81,6 @@ export class Interpreter {
       return value;
     }
 
-    throw new Error(`Unknown expression type: ${node.type}`);
+    this.throwError(`Unknown expression type: ${node.type}`);
   }
 }

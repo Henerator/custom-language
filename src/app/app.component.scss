@@ -39,16 +39,22 @@
   line-height: 1.3rem;
 }
 
-.output {
+.console {
   color: colors.$white;
 }
 
-.output__title {
+.console__title {
   font-size: 1.3rem;
 }
 
-.output__lines {
+.console__lines {
   padding: 12px;
+}
+
+::ng-deep {
+  .console__error {
+    color: colors.$red-light;
+  }
 }
 
 @media (max-width: 900px) {

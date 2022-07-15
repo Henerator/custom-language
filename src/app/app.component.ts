@@ -6,6 +6,7 @@ import {
   distinctUntilChanged,
   filter,
   map,
+  merge,
   Subject,
   takeUntil,
 } from 'rxjs';
@@ -40,22 +41,25 @@ export class AppComponent implements OnInit {
 
   private runCode(code: string): void {
     const lexer = new Lexer();
+    const parser = new Parser();
+    const interpreter = new Interpreter();
+
+    merge(lexer.error$, parser.error$, interpreter.error$).subscribe(
+      (error) => (this.consoleOutput = this.createErrorElement(error))
+    );
+
+    const finished$ = new Subject<void>();
+    interpreter.logEvent$
+      .pipe(takeUntil(finished$), buffer(finished$))
+      .subscribe((logs = []) => (this.consoleOutput = logs.join('<br>')));
+
     const tokens = lexer.tokenize(code);
 
     console.log('Tokens: ', tokens);
 
-    const parser = new Parser();
     const ast = parser.parse(tokens);
 
-    console.log(JSON.stringify(ast, null, 2));
-
-    const interpreter = new Interpreter();
-
-    const finished$ = new Subject<void>();
-
-    interpreter.logEvent$
-      .pipe(takeUntil(finished$), buffer(finished$))
-      .subscribe((logs = []) => (this.consoleOutput = logs.join('<br>')));
+    console.log('AST: ', ast);
 
     interpreter.execute(ast);
 
@@ -69,5 +73,9 @@ export class AppComponent implements OnInit {
       .split('\n')
       .map((line) => line.trim())
       .join('\n');
+  }
+
+  private createErrorElement(error: string): string {
+    return `<span class="console__error">${error}</span>`;
   }
 }
