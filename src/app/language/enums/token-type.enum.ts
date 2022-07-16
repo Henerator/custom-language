@@ -16,6 +16,7 @@ export enum TokenType {
   CloseParenthesis = 'CloseParenthesis',
 
   Space = 'Space',
+  Comment = 'Comment',
 
   Log = 'Log',
 }
