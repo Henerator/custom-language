@@ -34,12 +34,14 @@ class LexerToken {
 }
 
 const LexerDictionary = [
+  new LexerToken(TokenType.Space, `\\s+`),
+  new LexerToken(TokenType.Comment, `\/\/.*`),
+
   new LexerToken(TokenType.StatementPrefix, `lena`, 'i'),
   new LexerToken(TokenType.StatementSuffix, `please`, 'i'),
   new LexerToken(TokenType.Log, `say`),
 
-  new LexerToken(TokenType.Space, `\\s+`),
-  new LexerToken(TokenType.Comment, `\/\/.*`),
+  new LexerToken(TokenType.If, `if you think`, 'i'),
 
   new LexerToken(TokenType.Declaration, `set`),
 
@@ -50,6 +52,7 @@ const LexerDictionary = [
   new LexerToken(TokenType.Equal, `=`),
   new LexerToken(TokenType.AdditiveOperator, `[+-]`),
   new LexerToken(TokenType.MultiplicativeOperator, `[*/]`),
+  new LexerToken(TokenType.ConditionalOperator, `(<=|>=|==|<|>)`),
 
   new LexerToken(TokenType.OpenParenthesis, `\\(`),
   new LexerToken(TokenType.CloseParenthesis, `\\)`),

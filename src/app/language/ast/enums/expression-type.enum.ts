@@ -5,5 +5,7 @@ export enum ExpressionType {
   StringLiteral = 'StringLiteral',
   VariableLiteral = 'VariableLiteral',
   Declaration = 'Declaration',
+  Condition = 'Condition',
   Log = 'Log',
+  If = 'If',
 }

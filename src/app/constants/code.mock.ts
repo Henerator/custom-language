@@ -14,4 +14,10 @@ export const SourceCodeMock = `
   // you can define strings
   Lena set text = 'text' please
   Lena say text please
+
+  // you can use conditions
+  Lena set c = 1 please
+  Lena set condition = 'false' please
+  Lena if you think c < 2 + 3 * 4 set condition = 'true' please
+  Lena say condition please
 `;

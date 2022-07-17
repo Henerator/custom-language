@@ -1,8 +1,10 @@
 import { Subject } from 'rxjs';
 import {
   AdditiveBinaryOperationNode,
+  ConditionNode,
   DeclarationNode,
   ExpressionNode,
+  IfNode,
   LogNode,
   MultiplicativeBinaryOperationNode,
   NumberNode,
@@ -79,6 +81,31 @@ export class Interpreter extends ErrorProducer {
       console.log(value);
       this.logEventSubject.next(value);
       return value;
+    }
+
+    if (node instanceof ConditionNode) {
+      const leftValue = this.run(node.leftNode);
+      const rightValue = this.run(node.rightNode);
+      switch (node.operator.value) {
+        case '<=':
+          return leftValue <= rightValue;
+        case '>=':
+          return leftValue >= rightValue;
+        case '==':
+          return leftValue == rightValue;
+        case '<':
+          return leftValue < rightValue;
+        case '>':
+          return leftValue > rightValue;
+        default:
+          this.throwError(`Unknown condition operator: ${node.operator.value}`);
+      }
+    }
+
+    if (node instanceof IfNode) {
+      const conditionValue = this.run(node.condition);
+      if (conditionValue) this.run(node.expression);
+      return conditionValue;
     }
 
     this.throwError(`Unknown expression type: ${node.type}`);

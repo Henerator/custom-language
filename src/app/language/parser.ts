@@ -1,7 +1,9 @@
 import {
   AdditiveBinaryOperationNode,
+  ConditionNode,
   DeclarationNode,
   ExpressionNode,
+  IfNode,
   LogNode,
   MultiplicativeBinaryOperationNode,
   NumberNode,
@@ -28,7 +30,7 @@ export class Parser extends ErrorProducer {
 
     const statements = [];
     while (this.lookahead) {
-      statements.push(this.parseExpressionStatement());
+      statements.push(this.parseStatement());
     }
 
     return statements;
@@ -39,7 +41,7 @@ export class Parser extends ErrorProducer {
     return nextToken;
   }
 
-  private parseExpressionStatement() {
+  private parseStatement() {
     this.consume(TokenType.StatementPrefix);
     const expression = this.parseExpression();
     this.consume(TokenType.StatementSuffix);
@@ -48,13 +50,30 @@ export class Parser extends ErrorProducer {
 
   private parseExpression(): ExpressionNode {
     switch (this.lookahead?.type) {
+      case TokenType.If:
+        return this.parseIf();
       case TokenType.Declaration:
-        return this.parseDelcaration();
+        return this.parseDeclaration();
       case TokenType.Log:
         return this.parseLog();
       default:
         return this.parseAdditiveExpression();
     }
+  }
+
+  private parseIf(): ExpressionNode {
+    this.consume(TokenType.If);
+    const condition = this.parseCondition();
+    const expression = this.parseExpression();
+    return new IfNode(condition, expression);
+  }
+
+  private parseCondition(): ConditionNode {
+    const leftNode = this.parseExpression();
+    const operator = this.consume(TokenType.ConditionalOperator);
+    const rightNode = this.parseExpression();
+
+    return new ConditionNode(operator, leftNode, rightNode);
   }
 
   private parseLog(): ExpressionNode {
@@ -63,7 +82,7 @@ export class Parser extends ErrorProducer {
     return new LogNode(expression);
   }
 
-  private parseDelcaration(): ExpressionNode {
+  private parseDeclaration(): ExpressionNode {
     this.consume(TokenType.Declaration);
     const variableToken = this.consume(TokenType.Variable);
     this.consume(TokenType.Equal);

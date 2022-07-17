@@ -1,6 +1,12 @@
 export enum TokenType {
   StatementPrefix = 'StatementPrefix',
   StatementSuffix = 'StatementSuffix',
+  Log = 'Log',
+
+  If = 'If',
+
+  Space = 'Space',
+  Comment = 'Comment',
 
   Declaration = 'Declaration',
 
@@ -11,12 +17,8 @@ export enum TokenType {
   Equal = 'Equal',
   AdditiveOperator = 'AdditiveOperator',
   MultiplicativeOperator = 'MultiplicativeOperator',
+  ConditionalOperator = 'ConditionalOperator',
 
   OpenParenthesis = 'OpenParenthesis',
   CloseParenthesis = 'CloseParenthesis',
-
-  Space = 'Space',
-  Comment = 'Comment',
-
-  Log = 'Log',
 }

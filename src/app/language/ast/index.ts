@@ -6,3 +6,5 @@ export * from './additive-binary-operation-node';
 export * from './multiplicative-binary-operation-node';
 export * from './declaration-node';
 export * from './log-node';
+export * from './if-node';
+export * from './condition-node';
