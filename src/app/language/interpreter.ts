@@ -55,7 +55,7 @@ export class Interpreter extends ErrorProducer {
         case '-':
           return this.run(node.leftNode) - this.run(node.rightNode);
         default:
-          this.throwError(`Unknown additive operator`);
+          this.throwError(`Unknown additive operator "${node.operator.value}"`);
       }
     }
 
@@ -66,7 +66,9 @@ export class Interpreter extends ErrorProducer {
         case '/':
           return this.run(node.leftNode) / this.run(node.rightNode);
         default:
-          this.throwError(`Unknown multiplicative operator`);
+          this.throwError(
+            `Unknown multiplicative operator "${node.operator.value}"`
+          );
       }
     }
 

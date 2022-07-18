@@ -148,7 +148,7 @@ export class Parser extends ErrorProducer {
         return this.parseStringLiteral();
     }
 
-    this.throwError(`Unexpected literal on ${token?.position}`);
+    this.throwError('Unexpected literal', token);
   }
 
   private parseNumericLiteral(): ExpressionNode {
@@ -179,7 +179,8 @@ export class Parser extends ErrorProducer {
 
     if (token.type !== type) {
       this.throwError(
-        `Unexpected token: "${token.type}", expected: "${type}" on ${token.position}`
+        `Unexpected token: "${token.type}", expected: "${type}"`,
+        token
       );
     }
 

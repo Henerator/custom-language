@@ -38,8 +38,8 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ### Error
 
 - [x] Error console output
-- [ ] Error line number
-- [ ] Error context
+- [x] Error line number
+- [x] Error context
 - [x] Colorize console error text
 
 ### Editor

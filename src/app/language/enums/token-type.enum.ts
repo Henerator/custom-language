@@ -6,6 +6,7 @@ export enum TokenType {
   If = 'If',
 
   Space = 'Space',
+  NewLine = 'NewLine',
   Comment = 'Comment',
 
   Declaration = 'Declaration',

@@ -34,7 +34,8 @@ class LexerToken {
 }
 
 const LexerDictionary = [
-  new LexerToken(TokenType.Space, `\\s+`),
+  new LexerToken(TokenType.Space, `[\t\r ]+`),
+  new LexerToken(TokenType.NewLine, `\n+`),
   new LexerToken(TokenType.Comment, `\/\/.*`),
 
   new LexerToken(TokenType.StatementPrefix, `lena`, 'i'),
@@ -58,11 +59,17 @@ const LexerDictionary = [
   new LexerToken(TokenType.CloseParenthesis, `\\)`),
 ];
 
-const ingoreTokenTypes = new Set([TokenType.Space, TokenType.Comment]);
+const ingoreTokenTypes = new Set([
+  TokenType.Space,
+  TokenType.NewLine,
+  TokenType.Comment,
+]);
 
 export class Lexer extends ErrorProducer {
   private code = '';
   private position = 0;
+  private line = 1;
+  private lineChar = 1;
   private tokenList: Token[] = [];
 
   tokenize(code: string): Token[] {
@@ -83,16 +90,33 @@ export class Lexer extends ErrorProducer {
 
       if (tokenMatch) {
         const { match, value } = tokenMatch;
-        const token = new Token(lexerToken.type, value, this.position);
+        const token = new Token(
+          lexerToken.type,
+          value,
+          this.position,
+          this.line,
+          this.lineChar
+        );
         this.position += match.length;
+        this.lineChar += match.length;
         this.tokenList.push(token);
+        this.handleToken(token, match);
 
         return token;
       }
     }
 
     this.throwError(
-      `Unexpected token "${this.code[this.position]}" on ${this.position}`
+      `Unexpected token "${this.code[this.position]}" on line ${
+        this.line
+      } char ${this.lineChar}`
     );
+  }
+
+  private handleToken(token: Token, match: string): void {
+    if (token.type === TokenType.NewLine) {
+      this.line += match.length;
+      this.lineChar = 1;
+    }
   }
 }
