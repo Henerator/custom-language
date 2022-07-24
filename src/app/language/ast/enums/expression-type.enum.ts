@@ -1,4 +1,5 @@
 export enum ExpressionType {
+  UnaryExpression = 'UnaryExpression',
   AdditiveExpression = 'AdditiveExpression',
   MultiplicativeExpression = 'MultiplicativeExpression',
   NumericLiteral = 'NumericLiteral',

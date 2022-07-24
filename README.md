@@ -30,8 +30,9 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ### Lexer
 
-- [ ] Unary operator
-- [ ] Negative numbers
+- [x] Unary operator
+- [x] Negative numbers
+- [ ] Float numbers
 - [x] Comment
 - [x] If statement
 
@@ -41,6 +42,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 - [x] Error line number
 - [x] Error context
 - [x] Colorize console error text
+- [ ] Error position
 
 ### Editor
 

@@ -9,8 +9,10 @@ import {
   MultiplicativeBinaryOperationNode,
   NumberNode,
   StringNode,
+  UnaryOperationNode,
   VariableNode,
 } from './ast';
+import { TokenType } from './enums/token-type.enum';
 import { ErrorProducer } from './error-producer';
 
 export class Interpreter extends ErrorProducer {
@@ -48,22 +50,41 @@ export class Interpreter extends ErrorProducer {
       return node.value;
     }
 
+    if (node instanceof UnaryOperationNode) {
+      const value = this.run(node.value);
+      if (!this.isNumber(value)) {
+        this.throwError(
+          `Unary operator "${node.operator.value}" can only be applied to numeric literals`,
+          node.operator
+        );
+      }
+
+      switch (node.operator.type) {
+        case TokenType.Minus:
+          return -value;
+        case TokenType.Plus:
+          return +value;
+        default:
+          this.throwError(`Unknown additive operator "${node.operator.value}"`);
+      }
+    }
+
     if (node instanceof AdditiveBinaryOperationNode) {
-      switch (node.operator.value) {
-        case '+':
-          return this.run(node.leftNode) + this.run(node.rightNode);
-        case '-':
+      switch (node.operator.type) {
+        case TokenType.Minus:
           return this.run(node.leftNode) - this.run(node.rightNode);
+        case TokenType.Plus:
+          return this.run(node.leftNode) + this.run(node.rightNode);
         default:
           this.throwError(`Unknown additive operator "${node.operator.value}"`);
       }
     }
 
     if (node instanceof MultiplicativeBinaryOperationNode) {
-      switch (node.operator.value) {
-        case '*':
+      switch (node.operator.type) {
+        case TokenType.Multiplier:
           return this.run(node.leftNode) * this.run(node.rightNode);
-        case '/':
+        case TokenType.Divider:
           return this.run(node.leftNode) / this.run(node.rightNode);
         default:
           this.throwError(
@@ -111,5 +132,9 @@ export class Interpreter extends ErrorProducer {
     }
 
     this.throwError(`Unknown expression type: ${node.type}`);
+  }
+
+  private isNumber(value: unknown): boolean {
+    return typeof value === 'number';
   }
 }

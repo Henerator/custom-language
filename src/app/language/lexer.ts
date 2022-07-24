@@ -51,8 +51,10 @@ const LexerDictionary = [
   new LexerToken(TokenType.Variable, `[a-z]+[a-z0-9_]*`, 'i'),
 
   new LexerToken(TokenType.Equal, `=`),
-  new LexerToken(TokenType.AdditiveOperator, `[+-]`),
-  new LexerToken(TokenType.MultiplicativeOperator, `[*/]`),
+  new LexerToken(TokenType.Minus, `\\-`),
+  new LexerToken(TokenType.Plus, `\\+`),
+  new LexerToken(TokenType.Multiplier, `\\*`),
+  new LexerToken(TokenType.Divider, `\\/`),
   new LexerToken(TokenType.ConditionalOperator, `(<=|>=|==|<|>)`),
 
   new LexerToken(TokenType.OpenParenthesis, `\\(`),

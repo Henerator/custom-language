@@ -8,8 +8,11 @@ import {
   MultiplicativeBinaryOperationNode,
   NumberNode,
   StringNode,
+  UnaryOperationNode,
   VariableNode,
 } from './ast';
+import { AdditiveTokens } from './constants/additive-tokens.const';
+import { MultiplicativeTokens } from './constants/multiplicative-tokens.const';
 import { TokenType } from './enums/token-type.enum';
 import { ErrorProducer } from './error-producer';
 import { Token } from './token';
@@ -94,8 +97,8 @@ export class Parser extends ErrorProducer {
   private parseAdditiveExpression(): ExpressionNode {
     let leftNode = this.parseMultiplicativeExpression();
 
-    while (this.lookahead?.type === TokenType.AdditiveOperator) {
-      const operator = this.consume(TokenType.AdditiveOperator);
+    while (this.lookahead && AdditiveTokens.includes(this.lookahead.type)) {
+      const operator = this.consumeAdditiveToken();
       const rightNode = this.parseMultiplicativeExpression();
 
       leftNode = new AdditiveBinaryOperationNode(operator, leftNode, rightNode);
@@ -107,8 +110,11 @@ export class Parser extends ErrorProducer {
   private parseMultiplicativeExpression(): ExpressionNode {
     let leftNode = this.parsePrimaryExpression();
 
-    while (this.lookahead?.type === TokenType.MultiplicativeOperator) {
-      const operator = this.consume(TokenType.MultiplicativeOperator);
+    while (
+      this.lookahead &&
+      MultiplicativeTokens.includes(this.lookahead.type)
+    ) {
+      const operator = this.consumeMultiplicativeToken();
       const rightNode = this.parsePrimaryExpression();
 
       leftNode = new MultiplicativeBinaryOperationNode(
@@ -123,11 +129,21 @@ export class Parser extends ErrorProducer {
 
   private parsePrimaryExpression(): ExpressionNode {
     switch (this.lookahead?.type) {
+      case TokenType.Minus:
+        return this.parseUnaryExpression(TokenType.Minus);
+      case TokenType.Plus:
+        return this.parseUnaryExpression(TokenType.Plus);
       case TokenType.OpenParenthesis:
         return this.parseParenthesizedExpression();
       default:
         return this.parseLiteral();
     }
+  }
+
+  private parseUnaryExpression(token: TokenType): ExpressionNode {
+    const operator = this.consume(token);
+    const expression = this.parsePrimaryExpression();
+    return new UnaryOperationNode(operator, expression);
   }
 
   private parseParenthesizedExpression(): ExpressionNode {
@@ -186,5 +202,29 @@ export class Parser extends ErrorProducer {
 
     this.lookahead = this.getNextToken();
     return token;
+  }
+
+  private consumeAdditiveToken(): Token {
+    switch (this.lookahead?.type) {
+      case TokenType.Minus:
+        return this.consume(TokenType.Minus);
+      case TokenType.Plus:
+        return this.consume(TokenType.Plus);
+    }
+
+    this.throwError(`Unknown additive operator "${this.lookahead?.type}"`);
+  }
+
+  private consumeMultiplicativeToken(): Token {
+    switch (this.lookahead?.type) {
+      case TokenType.Multiplier:
+        return this.consume(TokenType.Multiplier);
+      case TokenType.Divider:
+        return this.consume(TokenType.Divider);
+    }
+
+    this.throwError(
+      `Unknown multiplicative operator "${this.lookahead?.type}"`
+    );
   }
 }

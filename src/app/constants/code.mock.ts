@@ -20,4 +20,8 @@ export const SourceCodeMock = `
   Lena set condition = 'false' please
   Lena if you think c < 2 + 3 * 4 set condition = 'true' please
   Lena say condition please
+
+  // you can use negative unary operator
+  Lena set a = -1 please
+  Lena say -(-a + 2) please
 `;

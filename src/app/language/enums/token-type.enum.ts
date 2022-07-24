@@ -16,8 +16,10 @@ export enum TokenType {
   Variable = 'Variable',
 
   Equal = 'Equal',
-  AdditiveOperator = 'AdditiveOperator',
-  MultiplicativeOperator = 'MultiplicativeOperator',
+  Minus = 'Minus',
+  Plus= 'Plus',
+  Multiplier = 'Multiplier',
+  Divider= 'Divider',
   ConditionalOperator = 'ConditionalOperator',
 
   OpenParenthesis = 'OpenParenthesis',
