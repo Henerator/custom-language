@@ -50,12 +50,17 @@ const LexerDictionary = [
   new LexerToken(TokenType.String, `'([^']*)'`, '', firstGroupMatchGetter),
   new LexerToken(TokenType.Variable, `[a-z]+[a-z0-9_]*`, 'i'),
 
-  new LexerToken(TokenType.Equal, `=`),
   new LexerToken(TokenType.Minus, `\\-`),
   new LexerToken(TokenType.Plus, `\\+`),
   new LexerToken(TokenType.Multiplier, `\\*`),
   new LexerToken(TokenType.Divider, `\\/`),
-  new LexerToken(TokenType.ConditionalOperator, `(<=|>=|==|<|>)`),
+
+  new LexerToken(TokenType.LessEqual, `<=`),
+  new LexerToken(TokenType.MoreEqual, `>=`),
+  new LexerToken(TokenType.EqualEqual, `==`),
+  new LexerToken(TokenType.Less, `<`),
+  new LexerToken(TokenType.More, `>`),
+  new LexerToken(TokenType.Equal, `=`),
 
   new LexerToken(TokenType.OpenParenthesis, `\\(`),
   new LexerToken(TokenType.CloseParenthesis, `\\)`),

@@ -16,11 +16,17 @@ export enum TokenType {
   Variable = 'Variable',
 
   Equal = 'Equal',
+  EqualEqual = 'EqualEqual',
+
+  Less = 'Less',
+  LessEqual = 'LessEqual',
+  MoreEqual = 'MoreEqual',
+  More = 'More',
+
   Minus = 'Minus',
-  Plus= 'Plus',
+  Plus = 'Plus',
   Multiplier = 'Multiplier',
-  Divider= 'Divider',
-  ConditionalOperator = 'ConditionalOperator',
+  Divider = 'Divider',
 
   OpenParenthesis = 'OpenParenthesis',
   CloseParenthesis = 'CloseParenthesis',

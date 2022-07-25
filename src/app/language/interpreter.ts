@@ -109,16 +109,16 @@ export class Interpreter extends ErrorProducer {
     if (node instanceof ConditionNode) {
       const leftValue = this.run(node.leftNode);
       const rightValue = this.run(node.rightNode);
-      switch (node.operator.value) {
-        case '<=':
+      switch (node.operator.type) {
+        case TokenType.LessEqual:
           return leftValue <= rightValue;
-        case '>=':
+        case TokenType.MoreEqual:
           return leftValue >= rightValue;
-        case '==':
+        case TokenType.EqualEqual:
           return leftValue == rightValue;
-        case '<':
+        case TokenType.Less:
           return leftValue < rightValue;
-        case '>':
+        case TokenType.More:
           return leftValue > rightValue;
         default:
           this.throwError(`Unknown condition operator: ${node.operator.value}`);

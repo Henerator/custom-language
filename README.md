@@ -42,7 +42,8 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 - [x] Error line number
 - [x] Error context
 - [x] Colorize console error text
-- [ ] Error position
+- [ ] Parser error position
+- [ ] Interpreter error position
 
 ### Editor
 

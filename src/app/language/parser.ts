@@ -12,6 +12,7 @@ import {
   VariableNode,
 } from './ast';
 import { AdditiveTokens } from './constants/additive-tokens.const';
+import { ComparisonTokens } from './constants/comparison-tokens.const';
 import { MultiplicativeTokens } from './constants/multiplicative-tokens.const';
 import { TokenType } from './enums/token-type.enum';
 import { ErrorProducer } from './error-producer';
@@ -73,7 +74,7 @@ export class Parser extends ErrorProducer {
 
   private parseCondition(): ConditionNode {
     const leftNode = this.parseExpression();
-    const operator = this.consume(TokenType.ConditionalOperator);
+    const operator = this.consumeComparisonToken();
     const rightNode = this.parseExpression();
 
     return new ConditionNode(operator, leftNode, rightNode);
@@ -205,26 +206,28 @@ export class Parser extends ErrorProducer {
   }
 
   private consumeAdditiveToken(): Token {
-    switch (this.lookahead?.type) {
-      case TokenType.Minus:
-        return this.consume(TokenType.Minus);
-      case TokenType.Plus:
-        return this.consume(TokenType.Plus);
+    if (this.lookahead && AdditiveTokens.includes(this.lookahead.type)) {
+      return this.consume(this.lookahead.type);
     }
 
     this.throwError(`Unknown additive operator "${this.lookahead?.type}"`);
   }
 
   private consumeMultiplicativeToken(): Token {
-    switch (this.lookahead?.type) {
-      case TokenType.Multiplier:
-        return this.consume(TokenType.Multiplier);
-      case TokenType.Divider:
-        return this.consume(TokenType.Divider);
+    if (this.lookahead && MultiplicativeTokens.includes(this.lookahead.type)) {
+      return this.consume(this.lookahead.type);
     }
 
     this.throwError(
       `Unknown multiplicative operator "${this.lookahead?.type}"`
     );
+  }
+
+  private consumeComparisonToken(): Token {
+    if (this.lookahead && ComparisonTokens.includes(this.lookahead.type)) {
+      return this.consume(this.lookahead?.type);
+    }
+
+    this.throwError(`Unknown comparison operator "${this.lookahead?.type}"`);
   }
 }
