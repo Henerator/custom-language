@@ -32,7 +32,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 - [x] Unary operator
 - [x] Negative numbers
-- [ ] Float numbers
+- [x] Float numbers
 - [x] Comment
 - [x] If statement
 

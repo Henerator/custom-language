@@ -43,7 +43,7 @@ export class Interpreter extends ErrorProducer {
     }
 
     if (node instanceof NumberNode) {
-      return parseInt(node.value);
+      return parseFloat(node.value);
     }
 
     if (node instanceof StringNode) {

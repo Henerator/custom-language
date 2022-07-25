@@ -46,7 +46,7 @@ const LexerDictionary = [
 
   new LexerToken(TokenType.Declaration, `set`),
 
-  new LexerToken(TokenType.Number, `[0-9]+`),
+  new LexerToken(TokenType.Number, `[0-9]+(\.[0-9]+)?`),
   new LexerToken(TokenType.String, `'([^']*)'`, '', firstGroupMatchGetter),
   new LexerToken(TokenType.Variable, `[a-z]+[a-z0-9_]*`, 'i'),
 

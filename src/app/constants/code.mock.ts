@@ -16,12 +16,13 @@ export const SourceCodeMock = `
   Lena say text please
 
   // you can use conditions
-  Lena set c = 1 please
-  Lena set condition = 'false' please
-  Lena if you think c < 2 + 3 * 4 set condition = 'true' please
-  Lena say condition please
+  Lena if you think 1 < 2 + 3 * 4 say 'true' please
 
   // you can use negative unary operator
-  Lena set a = -1 please
-  Lena say -(-a + 2) please
+  Lena set d = -1 please
+  Lena say -(-d + 2) please
+
+  // you can use float numbers
+  Lena set f = 1.25 please
+  Lena say f + 0.35 please
 `;
