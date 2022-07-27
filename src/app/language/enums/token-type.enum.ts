@@ -11,6 +11,9 @@ export enum TokenType {
 
   Declaration = 'Declaration',
 
+  Repeat = 'Repeat',
+  Times = 'Times',
+
   Number = 'Number',
   String = 'String',
   Variable = 'Variable',
@@ -30,4 +33,6 @@ export enum TokenType {
 
   OpenParenthesis = 'OpenParenthesis',
   CloseParenthesis = 'CloseParenthesis',
+  OpenSquareBracket = 'OpenSquareBracket',
+  CloseSquareBracket = 'CloseSquareBracket',
 }

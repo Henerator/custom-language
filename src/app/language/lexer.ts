@@ -46,6 +46,9 @@ const LexerDictionary = [
 
   new LexerToken(TokenType.Declaration, `set`),
 
+  new LexerToken(TokenType.Repeat, `repeat`, 'i'),
+  new LexerToken(TokenType.Times, `times`, 'i'),
+
   new LexerToken(TokenType.Number, `[0-9]+(\.[0-9]+)?`),
   new LexerToken(TokenType.String, `'([^']*)'`, '', firstGroupMatchGetter),
   new LexerToken(TokenType.Variable, `[a-z]+[a-z0-9_]*`, 'i'),
@@ -64,6 +67,8 @@ const LexerDictionary = [
 
   new LexerToken(TokenType.OpenParenthesis, `\\(`),
   new LexerToken(TokenType.CloseParenthesis, `\\)`),
+  new LexerToken(TokenType.OpenSquareBracket, `\\[`),
+  new LexerToken(TokenType.CloseSquareBracket, `\\]`),
 ];
 
 const ingoreTokenTypes = new Set([

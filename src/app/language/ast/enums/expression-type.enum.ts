@@ -7,6 +7,8 @@ export enum ExpressionType {
   VariableLiteral = 'VariableLiteral',
   Declaration = 'Declaration',
   Condition = 'Condition',
+  Repeat = 'Repeat',
+  Block = 'Block',
   Log = 'Log',
   If = 'If',
 }

@@ -1,5 +1,6 @@
 import {
   AdditiveBinaryOperationNode,
+  BlockNode,
   ConditionNode,
   DeclarationNode,
   ExpressionNode,
@@ -7,6 +8,7 @@ import {
   LogNode,
   MultiplicativeBinaryOperationNode,
   NumberNode,
+  RepeatNode,
   StringNode,
   UnaryOperationNode,
   VariableNode,
@@ -28,16 +30,11 @@ export class Parser extends ErrorProducer {
    * @param tokens array of tokens
    */
   parse(tokens: Token[]) {
-    this.tokens = tokens;
     this.position = -1;
+    this.tokens = tokens;
     this.lookahead = this.getNextToken();
 
-    const statements = [];
-    while (this.lookahead) {
-      statements.push(this.parseStatement());
-    }
-
-    return statements;
+    return this.parseBlock(null);
   }
 
   private getNextToken(): Token {
@@ -45,7 +42,15 @@ export class Parser extends ErrorProducer {
     return nextToken;
   }
 
-  private parseStatement() {
+  private parseBlock(closeType: TokenType | null): BlockNode {
+    const statements = [];
+    while (this.lookahead && this.lookahead.type !== closeType) {
+      statements.push(this.parseStatement());
+    }
+    return new BlockNode(statements);
+  }
+
+  private parseStatement(): ExpressionNode {
     this.consume(TokenType.StatementPrefix);
     const expression = this.parseExpression();
     this.consume(TokenType.StatementSuffix);
@@ -56,6 +61,8 @@ export class Parser extends ErrorProducer {
     switch (this.lookahead?.type) {
       case TokenType.If:
         return this.parseIf();
+      case TokenType.Repeat:
+        return this.parseRepeat();
       case TokenType.Declaration:
         return this.parseDeclaration();
       case TokenType.Log:
@@ -65,7 +72,18 @@ export class Parser extends ErrorProducer {
     }
   }
 
-  private parseIf(): ExpressionNode {
+  private parseRepeat(): RepeatNode {
+    this.consume(TokenType.Repeat);
+    this.consume(TokenType.OpenSquareBracket);
+    const block = this.parseBlock(TokenType.CloseSquareBracket);
+    this.consume(TokenType.CloseSquareBracket);
+    const count = this.parseNumericLiteral();
+    this.consume(TokenType.Times);
+
+    return new RepeatNode(block, count);
+  }
+
+  private parseIf(): IfNode {
     this.consume(TokenType.If);
     const condition = this.parseCondition();
     const expression = this.parseExpression();
@@ -80,13 +98,13 @@ export class Parser extends ErrorProducer {
     return new ConditionNode(operator, leftNode, rightNode);
   }
 
-  private parseLog(): ExpressionNode {
+  private parseLog(): LogNode {
     this.consume(TokenType.Log);
     const expression = this.parseExpression();
     return new LogNode(expression);
   }
 
-  private parseDeclaration(): ExpressionNode {
+  private parseDeclaration(): DeclarationNode {
     this.consume(TokenType.Declaration);
     const variableToken = this.consume(TokenType.Variable);
     this.consume(TokenType.Equal);
@@ -141,7 +159,7 @@ export class Parser extends ErrorProducer {
     }
   }
 
-  private parseUnaryExpression(token: TokenType): ExpressionNode {
+  private parseUnaryExpression(token: TokenType): UnaryOperationNode {
     const operator = this.consume(token);
     const expression = this.parsePrimaryExpression();
     return new UnaryOperationNode(operator, expression);
@@ -168,17 +186,17 @@ export class Parser extends ErrorProducer {
     this.throwError('Unexpected literal', token);
   }
 
-  private parseNumericLiteral(): ExpressionNode {
+  private parseNumericLiteral(): NumberNode {
     const token = this.consume(TokenType.Number);
     return new NumberNode(token.value);
   }
 
-  private parseStringLiteral(): ExpressionNode {
+  private parseStringLiteral(): StringNode {
     const token = this.consume(TokenType.String);
     return new StringNode(token.value);
   }
 
-  private parseVariableLiteral(): ExpressionNode {
+  private parseVariableLiteral(): VariableNode {
     const token = this.consume(TokenType.Variable);
     return new VariableNode(token.value);
   }

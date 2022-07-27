@@ -25,4 +25,11 @@ export const SourceCodeMock = `
   // you can use float numbers
   Lena set f = 1.25 please
   Lena say f + 0.35 please
+
+  // you can use loops
+  Lena set iteration = 1 please
+  Lena repeat [
+    Lena say 'iteration ' + iteration please
+    Lena set iteration = iteration + 1 please
+  ] 5 times please
 `;

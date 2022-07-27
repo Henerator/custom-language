@@ -1,6 +1,7 @@
 import { Subject } from 'rxjs';
 import {
   AdditiveBinaryOperationNode,
+  BlockNode,
   ConditionNode,
   DeclarationNode,
   ExpressionNode,
@@ -8,6 +9,7 @@ import {
   LogNode,
   MultiplicativeBinaryOperationNode,
   NumberNode,
+  RepeatNode,
   StringNode,
   UnaryOperationNode,
   VariableNode,
@@ -21,12 +23,9 @@ export class Interpreter extends ErrorProducer {
 
   logEvent$ = this.logEventSubject.asObservable();
 
-  execute(expressions: ExpressionNode[]): void {
+  execute(block: BlockNode): void {
     this.reset();
-    expressions.forEach((expression, index) => {
-      const output = this.run(expression);
-      console.log(`[${index}]: ${output}`);
-    });
+    this.run(block);
   }
 
   private reset() {
@@ -34,6 +33,22 @@ export class Interpreter extends ErrorProducer {
   }
 
   private run(node: ExpressionNode): any {
+    if (node instanceof BlockNode) {
+      node.expressions.forEach((expression, index) => {
+        const output = this.run(expression);
+        console.log(`[${index}]: ${output}`);
+      });
+      return;
+    }
+
+    if (node instanceof RepeatNode) {
+      let count = this.run(node.count);
+      while (count-- > 0) {
+        this.run(node.block);
+      }
+      return;
+    }
+
     if (node instanceof VariableNode) {
       if (!this.scope.hasOwnProperty(node.name)) {
         this.throwError(`Variable "${node.name}" is not exist`);

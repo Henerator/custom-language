@@ -9,3 +9,5 @@ export * from './declaration-node';
 export * from './log-node';
 export * from './if-node';
 export * from './condition-node';
+export * from './repeat-node';
+export * from './block-node';
